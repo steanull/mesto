@@ -5,7 +5,7 @@
 
 **Ссылка на Github-pages**
 
-* [steanull.github.io/mesto-project/](https://steanull.github.io/mesto/)
+* [steanull.github.io/mesto/](https://steanull.github.io/mesto/)
 
 **Используемые технологии**
 * Flexbox
