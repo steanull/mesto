@@ -1,0 +1,14 @@
+.element {
+  width: 100%;
+  margin: 0;
+  padding: 0;
+  position: relative;
+  background-color: #FFFFFF;
+  border-radius: 10px;
+  object-fit: cover;
+  overflow: hidden;
+  display: grid;
+  grid-template-columns: 240px minmax(min-content, max-content);
+  grid-template-rows: 282px  minmax(min-content, max-content);
+  grid-auto-rows: minmax(min-content, max-content);
+}
