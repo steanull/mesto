@@ -1,5 +1,4 @@
 const popup = document.querySelector('.popup');
-const form = document.querySelector('.form');
 const popupCloseBtn = popup.querySelector('.popup__close');
 const editProfileBtn = document.querySelector('.profile-info__button');
 const editProfileJob = document.querySelector('.profile-info__subtitle');
@@ -72,6 +71,37 @@ function removeCart(element) {
     element.remove();
 }
 
+//Функция очистки формы
+function resetForm(form){
+    form.reset()
+}
+
+//Функция добавления нового элемента в начало
+function addCard(cardElement, cardContainer) {
+    const card = newCard(cardElement);
+    cardContainer.prepend(card);
+}
+//Функция добавления-удаления класса element__button_active кнопке лайка в зависимости от состояния
+function buttonLike(element) {
+    element.classList.toggle('element__button_active');
+}
+
+//Перебор массива по порядку, добавление в DOM
+initialCards.forEach((item) => {
+    addCard(item, elementsList);
+});
+
+//Функция проверки наличия текста в полях, записи введенных значений, закрытия формы
+function formCardSubmitHandler(event) {
+    event.preventDefault();
+    addCard({
+        name: nameCardInput.value,
+        link: ImageCardInput.value
+    }, elementsList)
+    resetForm(formCardElement)
+    closePopup(popupCard);
+}
+
 //Слушатель события (нажатие на кнопку типа submit)
 formCardElement.addEventListener('submit', formCardSubmitHandler);
 
@@ -126,23 +156,12 @@ popupCard.addEventListener('click', (event) => {
     }
 })
 
-//Функция очистки формы
-function resetForm(form){
-    form.reset()
-}
-
 //Функция записи введенного текста в переменные, закрытия формы
 function formEditSubmitHandler(event) {
     event.preventDefault();
     editProfileName.textContent = nameInput.value;
     editProfileJob.textContent = jobInput.value;
     closePopup(popup);
-}
-
-//Функция добавления нового элемента в начало
-function addCard(cardElement, cardContainer) {
-    const card = newCard(cardElement);
-    cardContainer.prepend(card);
 }
 
 //функция присвоения необходимых значений карточке, которая возвращает заполненную карточку + удаление карточки по иконке + открытие галереи по нажатию
@@ -169,26 +188,4 @@ function newCard(cardData) {
         removeCart(cardElement);
     })
     return cardElement;
-}
-
-
-//Функция добавления-удаления класса element__button_active кнопке лайка в зависимости от состояния
-function buttonLike(element) {
-    element.classList.toggle('element__button_active');
-}
-
-//Перебор массива по порядку, добавление в DOM
-initialCards.forEach((item) => {
-    addCard(item, elementsList);
-});
-
-//Функция проверки наличия текста в полях, записи введенных значений, закрытия формы
-function formCardSubmitHandler(event) {
-    event.preventDefault();
-        addCard({
-            name: nameCardInput.value,
-            link: ImageCardInput.value
-        }, elementsList)
-        resetForm(formCardElement)
-        closePopup(popupCard);
 }
