@@ -1,4 +1,5 @@
 const popup = document.querySelector('.popup');
+const form = document.querySelector('.form');
 const popupCloseBtn = popup.querySelector('.popup__close');
 const editProfileBtn = document.querySelector('.profile-info__button');
 const editProfileJob = document.querySelector('.profile-info__subtitle');
@@ -61,35 +62,33 @@ function openPopup(element) {
     element.classList.add('popup_opened');
 }
 
-//Функция добавления класса для открытия Gallery
-function openGallery(element) {
-    element.classList.add('popup-gallery_opened');
-}
-
-//Функция удаления класса для закрытия Gallery
-function closeGallery(element) {
-    element.classList.remove('popup-gallery_opened');
-}
-
 //Функция удаления класса для закрытия popup
 function closePopup(element) {
     element.classList.remove('popup_opened');
 }
 
-//Открытие попап-формы путем нажатия на кнопку "Edit"
-editProfileBtn.addEventListener('click', function () {
-    openPopup(popup);
+//Функция удаления элемента
+function removeCart(element) {
+    element.remove();
+}
+
+//Слушатель события (нажатие на кнопку типа submit)
+formCardElement.addEventListener('submit', formCardSubmitHandler);
+
+//Слушатель события (нажатие на кнопку типа submit)
+formEditElement.addEventListener('submit', formEditSubmitHandler);
+
+//Открытие попап-формы путем нажатия на кнопку "Плюс"
+addCardBtn.addEventListener('click', function () {
+    openPopup(popupCard);
 });
 
-//Функция проверки наличия текста в полях, записи введенного текста в переменные, закрытия формы
-function formEditSubmitHandler(event) {
-    event.preventDefault();
-    if (nameInput.value && jobInput.value) {
-        editProfileName.textContent = nameInput.value;
-        editProfileJob.textContent = jobInput.value;
-        closePopup(popup);
-    }
-}
+//Открытие попап-формы путем нажатия на кнопку "Edit"
+editProfileBtn.addEventListener('click', function () {
+    nameInput.value = editProfileName.textContent;
+    jobInput.value = editProfileJob.textContent;
+    openPopup(popup);
+});
 
 //Закрытие попап-формы по нажатию на кнопку "крестик"
 popupCloseBtn.addEventListener('click', function () {
@@ -103,20 +102,42 @@ popup.addEventListener('click', (event) => {
     }
 })
 
-//Закрытие попап-формы по нажатию на "Escape"
-window.onkeydown = function (event) {
-    if (event.keyCode === 27) {
-        closePopup(popup);
-    }
-};
-
-//Слушатель события (нажатие на кнопку типа submit)
-formEditElement.addEventListener('submit', formEditSubmitHandler);
-
-//Открытие попап-формы путем нажатия на кнопку "Плюс"
-addCardBtn.addEventListener('click', function () {
-    openPopup(popupCard);
+//Закрытие Галереи по нажатию на кнопку "крестик"
+popupGalleryCloseBtn.addEventListener('click', function () {
+    closePopup(popupGallery);
 });
+
+//Закрытие Галереи по нажатию на пустое поле
+popupGallery.addEventListener('click', (event) => {
+    if (event.target === event.currentTarget) {
+        closePopup(popupGallery);
+    }
+})
+
+//Закрытие попап-формы по нажатию на кнопку "крестик"
+popupCardCloseBtn.addEventListener('click', function () {
+    closePopup(popupCard);
+});
+
+//Закрытие попап-формы по нажатию на пустое поле
+popupCard.addEventListener('click', (event) => {
+    if (event.target === event.currentTarget) {
+        closePopup(popupCard);
+    }
+})
+
+//Функция очистки формы
+function resetForm(form){
+    form.reset()
+}
+
+//Функция записи введенного текста в переменные, закрытия формы
+function formEditSubmitHandler(event) {
+    event.preventDefault();
+    editProfileName.textContent = nameInput.value;
+    editProfileJob.textContent = jobInput.value;
+    closePopup(popup);
+}
 
 //Функция добавления нового элемента в начало
 function addCard(cardElement, cardContainer) {
@@ -137,8 +158,9 @@ function newCard(cardData) {
     cardImage.alt = cardData.name;
     cardImage.addEventListener('click', function () {
         popupGalleryImage.src = cardData.link;
+        popupGalleryImage.alt = cardData.name;
         popupGalleryTitle.textContent = cardData.name;
-        openGallery(popupGallery);
+        openPopup(popupGallery);
     })
     cardLike.addEventListener('click', function () {
         buttonLike(cardLike);
@@ -148,25 +170,6 @@ function newCard(cardData) {
     })
     return cardElement;
 }
-
-//Закрытие Галереи по нажатию на кнопку "крестик"
-popupGalleryCloseBtn.addEventListener('click', function () {
-    closeGallery(popupGallery);
-});
-
-//Закрытие Галереи по нажатию на "Escape"
-window.onkeydown = function (event) {
-    if (event.keyCode === 27) {
-        closeGallery(popupGallery);
-    }
-};
-
-//Закрытие Галереи по нажатию на пустое поле
-popupGallery.addEventListener('click', (event) => {
-    if (event.target === event.currentTarget) {
-        closeGallery(popupGallery);
-    }
-})
 
 
 //Функция добавления-удаления класса element__button_active кнопке лайка в зависимости от состояния
@@ -182,38 +185,10 @@ initialCards.forEach((item) => {
 //Функция проверки наличия текста в полях, записи введенных значений, закрытия формы
 function formCardSubmitHandler(event) {
     event.preventDefault();
-    if (nameCardInput.value && ImageCardInput.value) {
         addCard({
             name: nameCardInput.value,
             link: ImageCardInput.value
         }, elementsList)
+        resetForm(formCardElement)
         closePopup(popupCard);
-    }
 }
-
-//Функция удаления элемента
-function removeCart(element) {
-    element.remove();
-}
-
-//Закрытие попап-формы по нажатию на кнопку "крестик"
-popupCardCloseBtn.addEventListener('click', function () {
-    closePopup(popupCard);
-});
-
-//Закрытие попап-формы по нажатию на "Escape"
-window.onkeydown = function (event) {
-    if (event.keyCode === 27) {
-        closePopup(popupCard);
-    }
-};
-
-//Закрытие попап-формы по нажатию на пустое поле
-popupCard.addEventListener('click', (event) => {
-    if (event.target === event.currentTarget) {
-        closePopup(popupCard);
-    }
-})
-
-//Слушатель события (нажатие на кнопку типа submit)
-formCardElement.addEventListener('submit', formCardSubmitHandler);
